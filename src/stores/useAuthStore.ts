@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 
-export const useAuthStore = defineStore("services", () => {
+export const useAuthStore = defineStore("auth", () => {
   const router = useRouter();
   const user = ref({});
   const loading = ref(true);
@@ -23,6 +23,7 @@ export const useAuthStore = defineStore("services", () => {
   function logout() {
     localStorage.removeItem("AUTH_TOKEN");
     localStorage.removeItem("USER");
+    localStorage.removeItem("totalEmployees");
     user.value = {};
     router.push({ name: "login" });
   }

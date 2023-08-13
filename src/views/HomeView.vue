@@ -1,14 +1,21 @@
 <script setup lang="ts">
-  import { useAuthStore } from "../stores/useAuthStore"
+import { useAuthStore } from "../stores/useAuthStore";
+import { useEmployeStore } from "../stores/useEmployesStore";
+import Aside from "../components/Aside/Aside.vue";
+import HeaderHome from "../components/Header/Header.vue";
+import SectionDataHome from "../components/SectionData/SectionData.vue";
 
-  const user = useAuthStore()
-
+const user = useAuthStore();
+const storeEmployees = useEmployeStore();
 </script>
 
 <template>
-  <main>
-   <h1 class="text-4xl text-red-500"> {{ user.getUserName }}</h1>
+  <div class="flex flex-col md:flex-row h-screen bg-gray-200 overflow-hidden">
+    <Aside :user="user" />
 
-   <button class="text-red-500 bg-black p-2"  @click="user.logout">ir a cerrar sesion</button>
-  </main>
+    <div class="flex-1 flex flex-col">
+      <HeaderHome :user="user" />
+      <SectionDataHome :employees="storeEmployees.employees" />
+    </div>
+  </div>
 </template>
