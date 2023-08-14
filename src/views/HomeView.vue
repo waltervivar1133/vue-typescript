@@ -7,6 +7,7 @@ import SectionDataHome from "../components/SectionData/SectionData.vue";
 
 const user = useAuthStore();
 const storeEmployees = useEmployeStore();
+
 </script>
 
 <template>

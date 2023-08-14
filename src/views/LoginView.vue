@@ -5,17 +5,22 @@ import AuthAPI from "../services/AuthAPI";
 import { useAuthStore } from "../stores/useAuthStore";
 import SideBar from "../components/SideBarAuth/SideBar.vue";
 import FormAuth from "../components/Form/FormAuth.vue";
-const toast = inject("toast");
+
+
+interface Toast {
+  open(options: { message: string; type: string }): void;
+}
+const toast = inject("toast") as Toast;
 const router = useRouter();
 const user = useAuthStore();
-const errorMessage = ref<string | null>(null);
+const errorMessage = ref<string | undefined>();
+
 
 const handleSubmit = async (formData: any) => {
   try {
     const { data } = await AuthAPI.login(formData);
     localStorage.setItem("AUTH_TOKEN", data.data.token);
     localStorage.setItem("USER", JSON.stringify(data.data.user));
-    user.setUser(data.data.user);
     router.push({ name: "home" });
     toast.open({
       message: "Bienvenido a tu plataforma",

@@ -1,22 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useEmployeStore } from "../../stores/useEmployesStore";
 const store = useEmployeStore();
-const { currentPage, totalEmployees, nextPage, prevPage, goToPage } =
-  useEmployeStore();
-console.log(totalEmployees);
-console.log(currentPage);
 const totalPages = computed(() => {
-  const total = Math.ceil(totalEmployees / 10);
+  const total = Math.ceil(store.totalEmployees / 10);
   return total > 0 ? total : 1;
 });
-
-const currentPageComputed = computed(() => store.currentPage);
-
-console.log("computad", currentPageComputed);
 </script>
-
-
 <template>
   <nav
     class="isolate inline-flex -space-x-px rounded-md shadow-sm my-6"
@@ -26,13 +16,13 @@ console.log("computad", currentPageComputed);
       <li>
         <a
           :class="{
-            'text-gray-400 cursor-not-allowed': currentPageComputed <= 1,
+            'text-gray-400 cursor-not-allowed': store.currentPage <= 1,
             'text-gray-900 hover:bg-gray-50 cursor-pointer':
-              currentPageComputed > 1,
+              store.currentPage > 1,
           }"
           href="#"
-          class="relative inline-flex items-center mr-3 px-3 py-2  focus:z-20 border rounded-md border-gray-scale-300"
-          @click.prevent="currentPageComputed > 1 && prevPage()"
+          class="relative inline-flex items-center mr-3 px-3 py-2 focus:z-20 border rounded-md border-gray-scale-300"
+          @click.prevent="store.currentPage > 1 && store.prevPage()"
         >
           <i class="fa-solid fa-angle-left text-gray-scale-900"></i>
         </a>
@@ -42,12 +32,13 @@ console.log("computad", currentPageComputed);
         <a
           href="#!"
           :class="{
-            'bg-gray-100 text-gray-scale-900 rounded-md': i === currentPageComputed,
-            'hover:bg-gray-50': i !== currentPageComputed,
-            'text-gray-900': i !== currentPageComputed,
+            'bg-gray-100 text-gray-scale-900 rounded-md':
+              i === store.currentPage,
+            'hover:bg-gray-50': i !== store.currentPage,
+            'text-gray-900': i !== store.currentPage,
           }"
-          class="relative hidden items-center px-4 py-2 text-sm font-semibold  focus:z-20 focus:outline-offset-0 md:inline-flex"
-          @click.prevent="goToPage(i)"
+          class="relative hidden items-center px-4 py-2 text-sm font-semibold focus:z-20 focus:outline-offset-0 md:inline-flex"
+          @click.prevent="store.goToPage(i)"
         >
           {{ i }}
         </a>
@@ -56,14 +47,13 @@ console.log("computad", currentPageComputed);
       <li>
         <a
           :class="{
-            'text-gray-400 cursor-not-allowed':
-              currentPageComputed >= totalPages,
+            'text-gray-400 cursor-not-allowed': store.currentPage >= totalPages,
             'text-gray-900 hover:bg-gray-50 cursor-pointer':
-              currentPageComputed < totalPages,
+              store.currentPage < totalPages,
           }"
           href="#"
           class="relative inline-flex items-center ml-3 rounded-md px-3 py-2 border border-gray-scale-300"
-          @click.prevent="currentPageComputed < totalPages && nextPage()"
+          @click.prevent="store.currentPage < totalPages && store.nextPage()"
         >
           <i class="fa-solid fa-angle-right text-gray-scale-900"></i>
         </a>

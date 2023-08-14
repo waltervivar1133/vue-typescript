@@ -1,8 +1,17 @@
 
 <script setup lang="ts">
+import type { PropType } from "vue";
+
+type FormData = {
+  correo: string;
+  password: string;
+};
+
+type HandleSubmitFunction = (data: FormData) => void;
+
 defineProps({
   handleSubmit: {
-    type: Function,
+    type: Function as PropType<HandleSubmitFunction>,
     required: true,
   },
   errorMessage: {

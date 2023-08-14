@@ -1,40 +1,45 @@
 import { defineStore } from "pinia";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, type Ref } from "vue";
 import { useRouter } from "vue-router";
 
-export const useAuthStore = defineStore("auth", () => {
+export interface User {
+  nombre?: string;
+}
+export interface AuthStore {
+  user: Ref<User>;
+  logout: () => void;
+  getUserName: Ref<string>;
+}
+
+export const useAuthStore = defineStore("auth", (): AuthStore => {
   const router = useRouter();
   const user = ref({});
-  const loading = ref(true);
 
   onMounted(() => {
     try {
-      const data = JSON.parse(localStorage.getItem("USER"));
-      user.value = data;
+      const dataString = localStorage.getItem("USER");
+      if (dataString) {
+        const data = JSON.parse(dataString);
+        if (data && typeof data === "object" && "nombre" in data) {
+          user.value = data;
+        }
+      }
     } catch (error) {
       console.log(error);
-    } finally {
-      loading.value = false;
     }
   });
-  const getUserName = computed(() =>
-    user.value?.nombre ? user.value?.nombre : ""
-  );
+  const getUserName = computed(() => user?.value.nombre || "");
+
   function logout() {
     localStorage.removeItem("AUTH_TOKEN");
     localStorage.removeItem("USER");
-    localStorage.removeItem("totalEmployees");
     user.value = {};
     router.push({ name: "login" });
   }
-  function setUser(userData: any) {
-    user.value = userData;
-  }
+
   return {
     user,
-    loading,
     logout,
     getUserName,
-    setUser,
   };
 });
