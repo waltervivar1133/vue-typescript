@@ -38,3 +38,5 @@ npm run dev
 ```sh
 npm run build
 ```
+### Deploy
+https://culqi-test.netlify.app/
